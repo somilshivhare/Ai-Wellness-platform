@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./Routes/AuthRoutes');
-const initVideoChat = require('./VideoChat/VideoChatLogic');
+const initVideoChat = require('./Services/VideoChatLogic');
 
 dotenv.config();
 
@@ -27,8 +27,8 @@ mongoose
     .catch((err) => console.error('MongoDB connection error:', err.message));
 
 // SSL Certificates
-const keyPath = path.join(__dirname, 'VideoChat', 'cert.key');
-const certPath = path.join(__dirname, 'VideoChat', 'cert.crt');
+const keyPath = path.join(__dirname, 'Services', 'cert.key');
+const certPath = path.join(__dirname, 'Services', 'cert.crt');
 
 const key = fs.readFileSync(keyPath);
 const cert = fs.readFileSync(certPath);
