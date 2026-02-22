@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const express = require('express');
-const socketio = require('socket.io');
+const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./Routes/AuthRoutes');
-const initVideoChat = require('./VideoChat/VideoChatLogic');
+const sessionRoutes = require('./Routes/SessionRoutes');
+const initVideoChat = require('./Services/VideoChat/VideoChatLogic');
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/session', sessionRoutes);
 
 // Database Connection
 mongoose
@@ -27,14 +29,14 @@ mongoose
     .catch((err) => console.error('MongoDB connection error:', err.message));
 
 // SSL Certificates
-const keyPath = path.join(__dirname, 'VideoChat', 'cert.key');
-const certPath = path.join(__dirname, 'VideoChat', 'cert.crt');
+const keyPath = path.join(__dirname, 'Services/VideoChat', 'cert.key');
+const certPath = path.join(__dirname, 'Services/VideoChat', 'cert.crt');
 
 const key = fs.readFileSync(keyPath);
 const cert = fs.readFileSync(certPath);
 const expressServer = https.createServer({ key, cert }, app);
 
-const io = socketio(expressServer, {
+const io = new Server(expressServer, {
     cors: {
         origin: [
             /^https?:\/\/localhost(:\d+)?$/,
