@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
 const Login = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -43,7 +48,7 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(data.user));
       }
 
-      navigate('/video-chat');
+      navigate('/dashboard');
     } catch (error) {
       alert(error.message || 'Unable to login. Please try again.');
     } finally {
@@ -54,7 +59,9 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2 className="auth-title">Welcome Back</h2>
+        <h1 className="brand-title">MindBridge AI</h1>
+        <h2 className="auth-title">Login</h2>
+        <p className="auth-subtitle">Secure access to your mental wellness dashboard</p>
         <form onSubmit={handleSubmit}>
           <Input
             label="Username / Email"

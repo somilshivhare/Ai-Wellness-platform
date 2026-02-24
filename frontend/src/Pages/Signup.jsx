@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
 const Signup = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -57,7 +62,9 @@ const Signup = () => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2 className="auth-title">Create Account</h2>
+        <h1 className="brand-title">MindBridge AI</h1>
+        <h2 className="auth-title">Sign Up</h2>
+        <p className="auth-subtitle">Start tracking your emotional health</p>
         <form onSubmit={handleSubmit}>
           <Input
             label="Full Name"
