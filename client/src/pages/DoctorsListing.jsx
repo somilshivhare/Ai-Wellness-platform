@@ -203,7 +203,10 @@ export default function DoctorsListing() {
                   </div>
                 </div>
               )}
-      </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </Layout>
   );
 }
