@@ -54,44 +54,77 @@ export default function VideoCall() {
           }
         };
 
-        // Connect to Socket.io
+        // Connect to Socket.io with error handling
         socketRef.current = io('http://localhost:5000', {
           auth: { token },
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionAttempts: 10,
         });
 
-        socketRef.current.emit('join_video', {
-          videoSessionId: appointmentId,
-          role: 'user',
+        socketRef.current.on('connect', () => {
+          console.log('[v0] Socket.io connected:', socketRef.current.id);
+          socketRef.current.emit('join_video', {
+            videoSessionId: appointmentId,
+            role: 'user',
+          });
+        });
+
+        socketRef.current.on('connect_error', (error) => {
+          console.error('[v0] Socket.io connection error:', error);
+        });
+
+        socketRef.current.on('disconnect', (reason) => {
+          console.log('[v0] Socket.io disconnected:', reason);
         });
 
         socketRef.current.on('user_joined_video', async (data) => {
-          const offer = await peerConnection.createOffer();
-          await peerConnection.setLocalDescription(offer);
-          socketRef.current.emit('webrtc_offer', {
-            videoSessionId: appointmentId,
-            offer,
-          });
+          console.log('[v0] Other user joined video:', data);
+          try {
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            console.log('[v0] Sending WebRTC offer');
+            socketRef.current.emit('webrtc_offer', {
+              videoSessionId: appointmentId,
+              offer,
+            });
+          } catch (error) {
+            console.error('[v0] Error creating offer:', error);
+          }
         });
 
         socketRef.current.on('webrtc_offer', async (data) => {
-          await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
-          const answer = await peerConnection.createAnswer();
-          await peerConnection.setLocalDescription(answer);
-          socketRef.current.emit('webrtc_answer', {
-            videoSessionId: appointmentId,
-            answer,
-          });
+          console.log('[v0] Received WebRTC offer from:', data.from);
+          try {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            console.log('[v0] Sending WebRTC answer');
+            socketRef.current.emit('webrtc_answer', {
+              videoSessionId: appointmentId,
+              answer,
+            });
+          } catch (error) {
+            console.error('[v0] Error handling offer:', error);
+          }
         });
 
         socketRef.current.on('webrtc_answer', async (data) => {
-          await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+          console.log('[v0] Received WebRTC answer from:', data.from);
+          try {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+            console.log('[v0] WebRTC connection established');
+          } catch (error) {
+            console.error('[v0] Error handling answer:', error);
+          }
         });
 
         socketRef.current.on('webrtc_ice_candidate', async (data) => {
           try {
+            console.log('[v0] Adding ICE candidate');
             await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
           } catch (error) {
-            console.error('Error adding ICE candidate:', error);
+            console.error('[v0] Error adding ICE candidate:', error);
           }
         });
 
@@ -119,6 +152,7 @@ export default function VideoCall() {
 
   const handleToggleAudio = () => {
     if (localStreamRef.current) {
+      console.log('[v0] Toggling audio:', !isAudioOn ? 'ON' : 'OFF');
       toggleAudio(localStreamRef.current, !isAudioOn);
       setIsAudioOn(!isAudioOn);
       socketRef.current?.emit('toggle_audio', {
@@ -130,6 +164,7 @@ export default function VideoCall() {
 
   const handleToggleVideo = () => {
     if (localStreamRef.current) {
+      console.log('[v0] Toggling video:', !isVideoOn ? 'ON' : 'OFF');
       toggleVideo(localStreamRef.current, !isVideoOn);
       setIsVideoOn(!isVideoOn);
       socketRef.current?.emit('toggle_video', {
@@ -140,6 +175,7 @@ export default function VideoCall() {
   };
 
   const handleEndCall = () => {
+    console.log('[v0] Ending video call');
     socketRef.current?.emit('end_video', {
       videoSessionId: appointmentId,
     });
