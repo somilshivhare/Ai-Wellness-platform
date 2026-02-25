@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from './store/authStore';
 import { authAPI } from './services/api';
 
@@ -35,7 +35,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
 export default function App() {
   const { setUser, setToken, token } = useAuthStore();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Check if user is already logged in

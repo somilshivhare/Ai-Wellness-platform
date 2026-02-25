@@ -238,6 +238,28 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-httpServer.listen(PORT, () => {
+
+const server = httpServer.listen(PORT, () => {
   console.log(`✓ Server running on port ${PORT}`);
+});
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+    process.exit(0);
+  });
+});
+
+// Handle port already in use
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    console.error(`✗ Port ${PORT} is already in use. Trying port ${PORT + 1}...`);
+    const altServer = httpServer.listen(PORT + 1, () => {
+      console.log(`✓ Server running on port ${PORT + 1}`);
+    });
+  } else {
+    throw error;
+  }
 });
