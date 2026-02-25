@@ -62,176 +62,239 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center px-4">
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-lg">MB</span>
+      <div className="min-h-[calc(100vh-80px)] bg-white flex">
+        {/* Branding Side - Left */}
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-main via-primary-light to-primary-dark flex-col items-center justify-center px-12 py-16">
+          <div className="text-center space-y-8 max-w-lg">
+            <div className="space-y-4">
+              <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto shadow-xl">
+                <Heart size={48} className="text-white fill-white" />
+              </div>
+              <h2 className="text-5xl font-display font-bold text-white leading-tight">
+                Your Mental Wellness Starts Here
+              </h2>
+              <p className="text-lg text-white/80 leading-relaxed">
+                Connect with licensed therapists, receive personalized assessments, and take control of your mental health journey.
+              </p>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">MindBridge</h1>
-          </div>
 
-          {/* Tab Toggle */}
-          <div className="flex gap-2 mb-8 bg-gray-100 p-1 rounded-lg">
-            <button
-              onClick={() => setIsLogin(true)}
-              className={`flex-1 py-2 px-4 rounded font-medium transition ${
-                isLogin
-                  ? 'bg-white text-indigo-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => setIsLogin(false)}
-              className={`flex-1 py-2 px-4 rounded font-medium transition ${
-                !isLogin
-                  ? 'bg-white text-indigo-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Sign Up
-            </button>
-          </div>
-
-          {/* Role Selection (Signup only) */}
-          {!isLogin && (
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                I am a:
-              </label>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setRole('patient')}
-                  className={`flex-1 py-3 px-4 rounded-lg border-2 font-medium transition ${
-                    role === 'patient'
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
-                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <User size={18} className="inline mr-2" />
-                  Patient
-                </button>
-                <button
-                  onClick={() => setRole('doctor')}
-                  className={`flex-1 py-3 px-4 rounded-lg border-2 font-medium transition ${
-                    role === 'doctor'
-                      ? 'border-purple-600 bg-purple-50 text-purple-600'
-                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <User size={18} className="inline mr-2" />
-                  Therapist
-                </button>
+            {/* Features List */}
+            <div className="space-y-4 pt-8">
+              <div className="flex items-center gap-4 text-white/90">
+                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                  <Mail size={24} />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold">Secure & Private</p>
+                  <p className="text-sm text-white/70">Your data is protected with encryption</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 text-white/90">
+                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                  <User size={24} />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold">Licensed Professionals</p>
+                  <p className="text-sm text-white/70">Verified therapists and counselors</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 text-white/90">
+                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                  <Lock size={24} />
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold">Available 24/7</p>
+                  <p className="text-sm text-white/70">Support whenever you need it</p>
+                </div>
               </div>
             </div>
-          )}
+          </div>
+        </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-              {error}
+        {/* Form Side - Right */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center px-6 md:px-12 py-12 md:py-0">
+          <div className="w-full max-w-md space-y-8 animate-slideUp">
+            {/* Header */}
+            <div className="text-center space-y-2">
+              <h1 className="text-3xl md:text-4xl font-display font-bold text-neutral-900">
+                {isLogin ? 'Welcome Back' : 'Join MindBridge'}
+              </h1>
+              <p className="text-neutral-600">
+                {isLogin
+                  ? 'Sign in to access your account'
+                  : 'Start your wellness journey today'}
+              </p>
             </div>
-          )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Full Name (Signup only) */}
+            {/* Tab Toggle */}
+            <div className="inline-flex gap-2 bg-neutral-100 p-1.5 rounded-xl w-full">
+              <button
+                onClick={() => setIsLogin(true)}
+                className={`flex-1 py-2.5 px-4 rounded-lg font-semibold transition-all duration-base ${
+                  isLogin
+                    ? 'bg-white text-primary-main shadow-md'
+                    : 'text-neutral-600 hover:text-neutral-900'
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => setIsLogin(false)}
+                className={`flex-1 py-2.5 px-4 rounded-lg font-semibold transition-all duration-base ${
+                  !isLogin
+                    ? 'bg-white text-primary-main shadow-md'
+                    : 'text-neutral-600 hover:text-neutral-900'
+                }`}
+              >
+                Sign Up
+              </button>
+            </div>
+
+            {/* Role Selection (Signup only) */}
             {!isLogin && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
+              <div className="space-y-3 p-5 bg-primary-main/5 rounded-2xl border border-primary-main/10">
+                <label className="block text-sm font-semibold text-neutral-900">
+                  Who are you?
                 </label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="Your full name"
-                />
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setRole('patient')}
+                    className={`py-3 px-4 rounded-xl font-semibold transition-all duration-base border-2 flex items-center justify-center gap-2 ${
+                      role === 'patient'
+                        ? 'border-primary-main bg-primary-main/10 text-primary-main'
+                        : 'border-neutral-200 text-neutral-700 hover:border-primary-main/30'
+                    }`}
+                  >
+                    <User size={18} />
+                    <span>Patient</span>
+                  </button>
+                  <button
+                    onClick={() => setRole('doctor')}
+                    className={`py-3 px-4 rounded-xl font-semibold transition-all duration-base border-2 flex items-center justify-center gap-2 ${
+                      role === 'doctor'
+                        ? 'border-primary-main bg-primary-main/10 text-primary-main'
+                        : 'border-neutral-200 text-neutral-700 hover:border-primary-main/30'
+                    }`}
+                  >
+                    <Heart size={18} />
+                    <span>Therapist</span>
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 text-gray-400" size={18} />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="you@example.com"
-                />
-              </div>
-            </div>
-
-            {/* Phone (Signup only) */}
-            {!isLogin && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="+1 (555) 000-0000"
-                />
+            {/* Error Message */}
+            {error && (
+              <div className="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+                <p className="text-red-700 font-medium text-sm">{error}</p>
               </div>
             )}
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 text-gray-400" size={18} />
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  minLength={6}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  placeholder="••••••••"
-                />
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Full Name (Signup only) */}
+              {!isLogin && (
+                <div className="form-group">
+                  <label className="form-label">Full Name</label>
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    required
+                    placeholder="John Doe"
+                    className="form-input"
+                  />
+                </div>
+              )}
+
+              {/* Email */}
+              <div className="form-group">
+                <label className="form-label">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-4 text-neutral-400" size={20} />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="you@example.com"
+                    className="form-input pl-12"
+                  />
+                </div>
+              </div>
+
+              {/* Phone (Signup only) */}
+              {!isLogin && (
+                <div className="form-group">
+                  <label className="form-label">Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+1 (555) 000-0000"
+                    className="form-input"
+                  />
+                </div>
+              )}
+
+              {/* Password */}
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-4 text-neutral-400" size={20} />
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    minLength={6}
+                    placeholder="••••••••"
+                    className="form-input pl-12"
+                  />
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-primary w-full py-3 text-base font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <div className="spinner border-2 border-white border-t-transparent w-5 h-5" />
+                ) : isLogin ? (
+                  'Sign In'
+                ) : (
+                  'Create Account'
+                )}
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-neutral-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-3 bg-white text-neutral-600">or</span>
               </div>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Create Account'}
-            </button>
-          </form>
-
-          {/* Footer */}
-          <p className="text-center text-gray-600 mt-6">
-            {isLogin ? "Don't have an account? " : 'Already have an account? '}
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-indigo-600 font-semibold hover:underline"
-            >
-              {isLogin ? 'Sign up' : 'Log in'}
-            </button>
-          </p>
+            {/* Toggle */}
+            <p className="text-center text-neutral-600">
+              {isLogin ? "Don't have an account? " : 'Already have an account? '}
+              <button
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-primary-main font-semibold hover:underline transition-all duration-base"
+              >
+                {isLogin ? 'Sign up' : 'Sign in'}
+              </button>
+            </p>
+          </div>
         </div>
       </div>
     </Layout>
