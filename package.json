@@ -1,0 +1,26 @@
+{
+  "name": "mindbridge-ai",
+  "version": "1.0.0",
+  "description": "AI Mental Wellness Platform",
+  "private": true,
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build": "cd server && npm install && cd ../client && npm install && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^0.575.0",
+    "react": "^19.2.4",
+    "react-router-dom": "^7.13.1",
+    "socket.io": "^4.8.3"
+  }
+}
